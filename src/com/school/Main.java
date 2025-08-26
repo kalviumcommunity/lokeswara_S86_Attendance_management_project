@@ -1,3 +1,4 @@
+// src/com/school/Main.java
 package com.school;
 
 public class Main {
@@ -5,13 +6,16 @@ public class Main {
         System.out.println("Welcome to the Attendance Management System!");
 
         Student[] students = {
-            new Student("chetan", 1),
-            new Student("satya", 2)
+            new Student("Chetan"),
+            new Student("Satya"),
+            new Student("Ravi"),
+            new Student("Anjali")
         };
 
         Course[] courses = {
-            new Course("DBMS", "DBMS101"),
-            new Course("OOPS", "OOPS101")
+            new Course("DBMS"),
+            new Course("OOPS"),
+            new Course("Computer Networks")
         };
 
         System.out.println("\n--- Student List ---");
