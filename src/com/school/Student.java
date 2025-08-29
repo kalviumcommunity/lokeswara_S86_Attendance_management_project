@@ -1,4 +1,3 @@
-// src/com/school/Student.java
 package com.school;
 
 public class Student {
@@ -9,6 +8,15 @@ public class Student {
     public Student(String name) {
         this.name = name;
         this.studentId = nextStudentIdCounter++;
+    }
+
+    // Getters (Encapsulation)
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void displayDetails() {
