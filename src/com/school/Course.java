@@ -1,4 +1,3 @@
-// src/com/school/Course.java
 package com.school;
 
 public class Course {
@@ -9,6 +8,15 @@ public class Course {
     public Course(String courseName) {
         this.courseName = courseName;
         this.courseId = nextCourseIdCounter++;
+    }
+
+    // Getters (Encapsulation)
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 
     public void displayDetails() {

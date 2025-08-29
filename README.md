@@ -23,8 +23,20 @@ S86
 - Removed `setDetails()` methods and replaced with constructors.
 - Updated `Main.java` to demonstrate multiple Student and Course objects with auto-generated IDs.
 
+## Part 4
+- Applied **Encapsulation** with private fields and getters.
+- Added new `AttendanceRecord` class with validation.
+- Demonstrated **basic attendance recording** with valid and invalid statuses.
+- Updated `Main.java` to show attendance log.
+
+
 ## How to Run
 1. Navigate to project root.
 2. Compile all Java files:
-   ```bash
+   ```
    javac src/com/school/*.java
+  java -cp src com.school.Main
+  ```
+
+
+
