@@ -99,5 +99,3 @@ The program will display:
 3. **School Directory** - Demonstrating polymorphism where each Person object calls its specific `displayDetails()` method
 4. **Attendance Log** - Showing enhanced records with student names and course names
 5. File save confirmations for persistence
-
----
