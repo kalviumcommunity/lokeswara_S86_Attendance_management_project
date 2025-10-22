@@ -9,7 +9,7 @@ public class Main {
     public static void displaySchoolDirectory(List<Person> people) {
         System.out.println("\n=== School Directory (Polymorphic Display) ===");
         for (Person person : people) {
-            person.displayDetails(); // Polymorphic call - actual method depends on runtime type
+            person.displayDetails();
         }
     }
 
@@ -58,9 +58,9 @@ public class Main {
 
         // Create ArrayList of Person objects for polymorphism demonstration
         List<Person> schoolPeople = new ArrayList<>();
-        schoolPeople.addAll(students);    // Add all students
-        schoolPeople.addAll(teachers);    // Add all teachers  
-        schoolPeople.addAll(staffMembers); // Add all staff members
+        schoolPeople.addAll(students);   
+        schoolPeople.addAll(teachers);      
+        schoolPeople.addAll(staffMembers);
         
         // Demonstrate polymorphism
         displaySchoolDirectory(schoolPeople);

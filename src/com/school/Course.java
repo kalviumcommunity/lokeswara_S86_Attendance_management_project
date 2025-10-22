@@ -1,7 +1,7 @@
 package com.school;
 
 public class Course implements Storable {
-    private static int nextCourseIdCounter = 101; // auto ID generator
+    private static int nextCourseIdCounter = 101;
     private String courseName;
     private int courseId;
 

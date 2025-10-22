@@ -5,6 +5,7 @@ public class AttendanceRecord implements Storable {
     private Course course;
     private String status;
 
+    
     public AttendanceRecord(Student student, Course course, String status) {
         this.student = student;
         this.course = course;

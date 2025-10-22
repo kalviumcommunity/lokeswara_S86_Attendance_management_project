@@ -4,7 +4,7 @@ public class Student extends Person implements Storable {
     private String gradeLevel;
 
     public Student(String name, String gradeLevel) {
-        super(name); // Person handles ID & name
+        super(name);
         this.gradeLevel = gradeLevel;
     }
 
