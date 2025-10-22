@@ -1,7 +1,3 @@
-Got you bro! 🚀 Here’s an **updated README** including **Part-05** with the inheritance hierarchy:
-
----
-
 # Attendance Management Project
 
 This is a Java project for the Attendance Management System.
