@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    
+    // Method to demonstrate polymorphism
+    public static void displaySchoolDirectory(List<Person> people) {
+        System.out.println("\n=== School Directory (Polymorphic Display) ===");
+        for (Person person : people) {
+            person.displayDetails(); // Polymorphic call - actual method depends on runtime type
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("Welcome to the Attendance Management System!");
 
@@ -47,21 +56,39 @@ public class Main {
             c.displayDetails();
         }
 
-        // Attendance Recording
+        // Create ArrayList of Person objects for polymorphism demonstration
+        List<Person> schoolPeople = new ArrayList<>();
+        schoolPeople.addAll(students);    // Add all students
+        schoolPeople.addAll(teachers);    // Add all teachers  
+        schoolPeople.addAll(staffMembers); // Add all staff members
+        
+        // Demonstrate polymorphism
+        displaySchoolDirectory(schoolPeople);
+
+        // Attendance Recording with updated constructor
         System.out.println("\n--- Attendance Log ---");
         List<AttendanceRecord> attendanceLog = new ArrayList<>();
-        attendanceLog.add(new AttendanceRecord(students.get(0).getId(), courses.get(0).getCourseId(), "Present"));
-        attendanceLog.add(new AttendanceRecord(students.get(1).getId(), courses.get(1).getCourseId(), "Absent"));
-        attendanceLog.add(new AttendanceRecord(students.get(2).getId(), courses.get(2).getCourseId(), "present"));
-        attendanceLog.add(new AttendanceRecord(students.get(3).getId(), courses.get(1).getCourseId(), "Late"));
+        attendanceLog.add(new AttendanceRecord(students.get(0), courses.get(0), "Present"));
+        attendanceLog.add(new AttendanceRecord(students.get(1), courses.get(1), "Absent"));
+        attendanceLog.add(new AttendanceRecord(students.get(2), courses.get(2), "present"));
+        attendanceLog.add(new AttendanceRecord(students.get(3), courses.get(1), "Late"));
 
         for (AttendanceRecord record : attendanceLog) {
             record.displayRecord();
         }
 
-        // Save to files
+        // Save to files - Filter students from schoolPeople for file storage
         FileStorageService storage = new FileStorageService();
-        storage.saveData(students, "students.txt");
+        
+        // Filter only Student instances from schoolPeople list for file storage
+        List<Student> studentsForStorage = new ArrayList<>();
+        for (Person person : schoolPeople) {
+            if (person instanceof Student) {
+                studentsForStorage.add((Student) person);
+            }
+        }
+        
+        storage.saveData(studentsForStorage, "students.txt");
         storage.saveData(courses, "courses.txt");
         storage.saveData(attendanceLog, "attendance_log.txt");
     }
