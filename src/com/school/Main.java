@@ -18,7 +18,7 @@ public class Main {
 
         // Use ArrayLists now
         List<Student> students = new ArrayList<>();
-        students.add(new Student("Chetan", "10th Grade"));
+        students.add(new Student("Vijay", "10th Grade"));
         students.add(new Student("Satya", "11th Grade"));
         students.add(new Student("Ravi", "12th Grade"));
         students.add(new Student("Anjali", "9th Grade"));
