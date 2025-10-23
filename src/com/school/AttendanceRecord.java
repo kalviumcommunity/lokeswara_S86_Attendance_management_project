@@ -5,11 +5,11 @@ public class AttendanceRecord implements Storable {
     private Course course;
     private String status;
 
+
     public AttendanceRecord(Student student, Course course, String status) {
         this.student = student;
         this.course = course;
 
-        // Validation for status
         if (status.equalsIgnoreCase("Present") || status.equalsIgnoreCase("Absent")) {
             this.status = status.substring(0, 1).toUpperCase() + status.substring(1).toLowerCase();
         } else {

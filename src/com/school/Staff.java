@@ -4,7 +4,7 @@ public class Staff extends Person {
     private String role;
 
     public Staff(String name, String role) {
-        super(name); // Person handles ID & name
+        super(name);
         this.role = role;
     }
 

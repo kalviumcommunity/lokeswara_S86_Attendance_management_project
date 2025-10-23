@@ -9,7 +9,7 @@ public class Main {
     public static void displaySchoolDirectory(List<Person> people) {
         System.out.println("\n=== School Directory (Polymorphic Display) ===");
         for (Person person : people) {
-            person.displayDetails(); // Polymorphic call - actual method depends on runtime type
+            person.displayDetails();
         }
     }
 
@@ -18,7 +18,7 @@ public class Main {
 
         // Use ArrayLists now
         List<Student> students = new ArrayList<>();
-        students.add(new Student("Chetan", "10th Grade"));
+        students.add(new Student("Vijay", "10th Grade"));
         students.add(new Student("Satya", "11th Grade"));
         students.add(new Student("Ravi", "12th Grade"));
         students.add(new Student("Anjali", "9th Grade"));
@@ -58,29 +58,48 @@ public class Main {
 
         // Create ArrayList of Person objects for polymorphism demonstration
         List<Person> schoolPeople = new ArrayList<>();
-        schoolPeople.addAll(students);    // Add all students
-        schoolPeople.addAll(teachers);    // Add all teachers  
-        schoolPeople.addAll(staffMembers); // Add all staff members
+        schoolPeople.addAll(students);   
+        schoolPeople.addAll(teachers);      
+        schoolPeople.addAll(staffMembers);
         
         // Demonstrate polymorphism
         displaySchoolDirectory(schoolPeople);
 
-        // Attendance Recording with updated constructor
-        System.out.println("\n--- Attendance Log ---");
-        List<AttendanceRecord> attendanceLog = new ArrayList<>();
-        attendanceLog.add(new AttendanceRecord(students.get(0), courses.get(0), "Present"));
-        attendanceLog.add(new AttendanceRecord(students.get(1), courses.get(1), "Absent"));
-        attendanceLog.add(new AttendanceRecord(students.get(2), courses.get(2), "present"));
-        attendanceLog.add(new AttendanceRecord(students.get(3), courses.get(1), "Late"));
-
-        for (AttendanceRecord record : attendanceLog) {
-            record.displayRecord();
-        }
-
-        // Save to files - Filter students from schoolPeople for file storage
+        // Create FileStorageService and AttendanceService instances
         FileStorageService storage = new FileStorageService();
+        AttendanceService attendanceService = new AttendanceService(storage);
+
+        System.out.println("\n=== Demonstrating Overloaded markAttendance Methods ===");
         
-        // Filter only Student instances from schoolPeople list for file storage
+        // Method 1: Using Student and Course objects directly
+        System.out.println("\n--- Using markAttendance(Student, Course, String) ---");
+        attendanceService.markAttendance(students.get(0), courses.get(0), "Present");
+        attendanceService.markAttendance(students.get(1), courses.get(1), "Absent");
+        
+        // Method 2: Using IDs with lookup
+        System.out.println("\n--- Using markAttendance(int, int, String, Lists) ---");
+        attendanceService.markAttendance(students.get(2).getId(), courses.get(2).getCourseId(), "Present", students, courses);
+        attendanceService.markAttendance(students.get(3).getId(), courses.get(1).getCourseId(), "Late", students, courses);
+        
+        // Try with invalid ID to show error handling
+        attendanceService.markAttendance(999, courses.get(0).getCourseId(), "Present", students, courses);
+
+        System.out.println("\n=== Demonstrating Overloaded displayAttendanceLog Methods ===");
+        
+        // Method 1: Display all attendance records
+        attendanceService.displayAttendanceLog();
+        
+        // Method 2: Display attendance for a specific student
+        attendanceService.displayAttendanceLog(students.get(1)); // Satya's records
+        
+        // Method 3: Display attendance for a specific course
+        attendanceService.displayAttendanceLog(courses.get(1)); // OOPS course records
+
+        // Save attendance data using AttendanceService
+        System.out.println("\n=== Saving Data ===");
+        attendanceService.saveAttendanceData();
+        
+        // Save other data types
         List<Student> studentsForStorage = new ArrayList<>();
         for (Person person : schoolPeople) {
             if (person instanceof Student) {
@@ -90,6 +109,5 @@ public class Main {
         
         storage.saveData(studentsForStorage, "students.txt");
         storage.saveData(courses, "courses.txt");
-        storage.saveData(attendanceLog, "attendance_log.txt");
     }
 }
