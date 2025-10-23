@@ -75,6 +75,26 @@ S86
   * Richer attendance log with names instead of just IDs.
   * Proper object-oriented design with composition in AttendanceRecord.
 
+## Part 8: Overloaded Commands: Multiple Ways to Mark and Query Attendance
+
+* Created **`AttendanceService.java`** class to encapsulate attendance logic and manage the list of `AttendanceRecord` objects.
+* Implemented **overloaded `markAttendance` methods** in `AttendanceService`:
+  * `markAttendance(Student student, Course course, String status)` - Direct object-based method
+  * `markAttendance(int studentId, int courseId, String status, List<Student> allStudents, List<Course> allCourses)` - ID-based method with lookups
+* Implemented **overloaded `displayAttendanceLog` methods** in `AttendanceService`:
+  * `displayAttendanceLog()` - Shows all attendance records
+  * `displayAttendanceLog(Student student)` - Filters by specific student
+  * `displayAttendanceLog(Course course)` - Filters by specific course
+* Added **helper methods** for object lookups:
+  * `findStudentById(int studentId, List<Student> allStudents)`
+  * `findCourseById(int courseId, List<Course> allCourses)`
+* **Key Features:**
+  * Method overloading for flexible API usage
+  * Encapsulation of attendance management logic
+  * Error handling for invalid IDs
+  * Integration with existing `FileStorageService`
+  * Proper validation and status feedback
+
 ---
 
 ## How to Run
@@ -97,5 +117,7 @@ The program will display:
 1. Individual lists of Students, Teachers, and Staff
 2. Course list
 3. **School Directory** - Demonstrating polymorphism where each Person object calls its specific `displayDetails()` method
-4. **Attendance Log** - Showing enhanced records with student names and course names
-5. File save confirmations for persistence
+4. **Overloaded markAttendance Methods** - Shows different ways to mark attendance
+5. **Overloaded displayAttendanceLog Methods** - Shows complete log, student-specific, and course-specific attendance
+6. File save confirmations for persistence
+7. Check `attendance_log.txt` for saved attendance records in CSV format
