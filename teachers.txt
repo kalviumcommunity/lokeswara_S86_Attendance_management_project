@@ -1,0 +1,2 @@
+5,Mr. Sharma,DBMS
+6,Ms. Priya,OOPS

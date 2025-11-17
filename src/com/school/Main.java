@@ -1,113 +1,117 @@
 package com.school;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class - Acts as an orchestrator using service classes
+ * Demonstrates SOLID principles with proper separation of concerns
+ */
 public class Main {
     
-    // Method to demonstrate polymorphism
-    public static void displaySchoolDirectory(List<Person> people) {
+    // Method to demonstrate polymorphism using RegistrationService
+    public static void displaySchoolDirectory(RegistrationService registrationService) {
         System.out.println("\n=== School Directory (Polymorphic Display) ===");
-        for (Person person : people) {
-            person.displayDetails();
+        List<Person> allPeople = registrationService.getAllPeople();
+        for (Person person : allPeople) {
+            person.displayDetails(); // Polymorphic call
         }
     }
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Attendance Management System!");
+        System.out.println("Part 09: SOLID Service Layer with RegistrationService & AttendanceService\n");
 
-        // Use ArrayLists now
-        List<Student> students = new ArrayList<>();
-        students.add(new Student("Vijay", "10th Grade"));
-        students.add(new Student("Satya", "11th Grade"));
-        students.add(new Student("Ravi", "12th Grade"));
-        students.add(new Student("Anjali", "9th Grade"));
+        // Step 1: Initialize services with dependency injection
+        FileStorageService storageService = new FileStorageService();
+        RegistrationService registrationService = new RegistrationService(storageService);
+        AttendanceService attendanceService = new AttendanceService(storageService, registrationService);
 
-        List<Teacher> teachers = new ArrayList<>();
-        teachers.add(new Teacher("Mr. Sharma", "DBMS"));
-        teachers.add(new Teacher("Ms. Priya", "OOPS"));
+        // Step 2: Register Students using RegistrationService
+        System.out.println("=== Registering Students ===");
+        registrationService.registerStudent("Vijay", "10th Grade");
+        registrationService.registerStudent("Satya", "11th Grade");
+        registrationService.registerStudent("Ravi", "12th Grade");
+        registrationService.registerStudent("Anjali", "9th Grade");
 
-        List<Staff> staffMembers = new ArrayList<>();
-        staffMembers.add(new Staff("Ramesh", "Lab Assistant"));
-        staffMembers.add(new Staff("Suresh", "Clerk"));
+        // Step 3: Register Teachers using RegistrationService
+        System.out.println("\n=== Registering Teachers ===");
+        registrationService.registerTeacher("Mr. Sharma", "DBMS");
+        registrationService.registerTeacher("Ms. Priya", "OOPS");
 
-        List<Course> courses = new ArrayList<>();
-        courses.add(new Course("DBMS"));
-        courses.add(new Course("OOPS"));
-        courses.add(new Course("Computer Networks"));
+        // Step 4: Register Staff using RegistrationService
+        System.out.println("\n=== Registering Staff ===");
+        registrationService.registerStaff("Ramesh", "Lab Assistant");
+        registrationService.registerStaff("Suresh", "Clerk");
 
+        // Step 5: Create Courses using RegistrationService
+        System.out.println("\n=== Creating Courses ===");
+        registrationService.createCourse("DBMS");
+        registrationService.createCourse("OOPS");
+        registrationService.createCourse("Computer Networks");
+
+        // Step 6: Display individual lists
         System.out.println("\n--- Student List ---");
-        for (Student s : students) {
+        for (Student s : registrationService.getStudents()) {
             s.displayDetails();
         }
 
         System.out.println("\n--- Teacher List ---");
-        for (Teacher t : teachers) {
+        for (Teacher t : registrationService.getTeachers()) {
             t.displayDetails();
         }
 
         System.out.println("\n--- Staff List ---");
-        for (Staff st : staffMembers) {
+        for (Staff st : registrationService.getStaffMembers()) {
             st.displayDetails();
         }
 
         System.out.println("\n--- Course List ---");
-        for (Course c : courses) {
+        for (Course c : registrationService.getCourses()) {
             c.displayDetails();
         }
 
-        // Create ArrayList of Person objects for polymorphism demonstration
-        List<Person> schoolPeople = new ArrayList<>();
-        schoolPeople.addAll(students);   
-        schoolPeople.addAll(teachers);      
-        schoolPeople.addAll(staffMembers);
-        
-        // Demonstrate polymorphism
-        displaySchoolDirectory(schoolPeople);
+        // Step 7: Demonstrate polymorphism with RegistrationService
+        displaySchoolDirectory(registrationService);
 
-        // Create FileStorageService and AttendanceService instances
-        FileStorageService storage = new FileStorageService();
-        AttendanceService attendanceService = new AttendanceService(storage);
+        // Step 8: Display registration summary
+        registrationService.displayRegistrationSummary();
 
+        // Step 9: Mark Attendance using different overloaded methods
         System.out.println("\n=== Demonstrating Overloaded markAttendance Methods ===");
         
         // Method 1: Using Student and Course objects directly
         System.out.println("\n--- Using markAttendance(Student, Course, String) ---");
+        List<Student> students = registrationService.getStudents();
+        List<Course> courses = registrationService.getCourses();
         attendanceService.markAttendance(students.get(0), courses.get(0), "Present");
         attendanceService.markAttendance(students.get(1), courses.get(1), "Absent");
         
-        // Method 2: Using IDs with lookup
-        System.out.println("\n--- Using markAttendance(int, int, String, Lists) ---");
-        attendanceService.markAttendance(students.get(2).getId(), courses.get(2).getCourseId(), "Present", students, courses);
-        attendanceService.markAttendance(students.get(3).getId(), courses.get(1).getCourseId(), "Late", students, courses);
+        // Method 2: Using IDs with RegistrationService lookup
+        System.out.println("\n--- Using markAttendance(int, int, String) with RegistrationService ---");
+        attendanceService.markAttendance(students.get(2).getId(), courses.get(2).getCourseId(), "Present");
+        attendanceService.markAttendance(students.get(3).getId(), courses.get(1).getCourseId(), "Late");
         
         // Try with invalid ID to show error handling
-        attendanceService.markAttendance(999, courses.get(0).getCourseId(), "Present", students, courses);
+        attendanceService.markAttendance(999, courses.get(0).getCourseId(), "Present");
 
+        // Step 10: Display attendance logs using overloaded methods
         System.out.println("\n=== Demonstrating Overloaded displayAttendanceLog Methods ===");
         
-        // Method 1: Display all attendance records
+        // Display all attendance records
         attendanceService.displayAttendanceLog();
         
-        // Method 2: Display attendance for a specific student
+        // Display attendance for a specific student
         attendanceService.displayAttendanceLog(students.get(1)); // Satya's records
         
-        // Method 3: Display attendance for a specific course
+        // Display attendance for a specific course
         attendanceService.displayAttendanceLog(courses.get(1)); // OOPS course records
 
-        // Save attendance data using AttendanceService
-        System.out.println("\n=== Saving Data ===");
+        // Step 11: Save all data using service methods
+        System.out.println("\n=== Saving All Data ===");
+        registrationService.saveAllRegistrations();
         attendanceService.saveAttendanceData();
         
-        // Save other data types
-        List<Student> studentsForStorage = new ArrayList<>();
-        for (Person person : schoolPeople) {
-            if (person instanceof Student) {
-                studentsForStorage.add((Student) person);
-            }
-        }
-        
-        storage.saveData(studentsForStorage, "students.txt");
-        storage.saveData(courses, "courses.txt");
+        System.out.println("\n✅ Application completed successfully!");
+        System.out.println("📁 Check the following files: students.txt, teachers.txt, staff.txt, courses.txt, attendance_log.txt");
     }
 }
