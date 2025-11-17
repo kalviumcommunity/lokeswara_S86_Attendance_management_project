@@ -3,14 +3,21 @@ package com.school;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * AttendanceService - Manages attendance records only
+ * Applies Single Responsibility Principle (SRP) by focusing solely on attendance management
+ * Depends on RegistrationService for entity lookups
+ */
 public class AttendanceService {
     private List<AttendanceRecord> attendanceLog;
     private FileStorageService storageService;
+    private RegistrationService registrationService;
 
-    // Constructor
-    public AttendanceService(FileStorageService storageService) {
+    // Constructor with dependency injection
+    public AttendanceService(FileStorageService storageService, RegistrationService registrationService) {
         this.attendanceLog = new ArrayList<>();
         this.storageService = storageService;
+        this.registrationService = registrationService;
     }
 
     // Overloaded method 1: Mark attendance using Student and Course objects
@@ -20,37 +27,16 @@ public class AttendanceService {
         System.out.println("✅ Attendance marked for " + student.getName() + " in " + course.getCourseName());
     }
 
-    // Overloaded method 2: Mark attendance using IDs with lookup
-    public void markAttendance(int studentId, int courseId, String status, 
-                             List<Student> allStudents, List<Course> allCourses) {
-        Student student = findStudentById(studentId, allStudents);
-        Course course = findCourseById(courseId, allCourses);
+    // Overloaded method 2: Mark attendance using IDs with lookup via RegistrationService
+    public void markAttendance(int studentId, int courseId, String status) {
+        Student student = registrationService.findStudentById(studentId);
+        Course course = registrationService.findCourseById(courseId);
         
         if (student != null && course != null) {
             markAttendance(student, course, status); // Calls the first overloaded method
         } else {
             System.out.println("❌ Error: Student ID " + studentId + " or Course ID " + courseId + " not found");
         }
-    }
-
-    // Helper method to find student by ID
-    private Student findStudentById(int studentId, List<Student> allStudents) {
-        for (Student student : allStudents) {
-            if (student.getId() == studentId) {
-                return student;
-            }
-        }
-        return null;
-    }
-
-    // Helper method to find course by ID
-    private Course findCourseById(int courseId, List<Course> allCourses) {
-        for (Course course : allCourses) {
-            if (course.getCourseId() == courseId) {
-                return course;
-            }
-        }
-        return null;
     }
 
     // Overloaded method 1: Display all attendance records
