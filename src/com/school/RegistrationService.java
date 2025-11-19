@@ -42,10 +42,23 @@ public class RegistrationService {
         System.out.println("✅ Staff registered: " + name + " (ID: " + staff.getId() + ")");
     }
 
-    public void createCourse(String courseName) {
-        Course course = new Course(courseName);
+    public void createCourse(String courseName, int capacity) {
+        Course course = new Course(courseName, capacity);
         courses.add(course);
-        System.out.println("✅ Course created: " + courseName + " (ID: C" + course.getCourseId() + ")");
+        System.out.println("✅ Course created: " + courseName + " (ID: C" + course.getCourseId() + ", Capacity: " + capacity + ")");
+    }
+
+    // Enrollment method with capacity management
+    public boolean enrollStudentInCourse(Student student, Course course) {
+        boolean success = course.addStudent(student);
+        if (success) {
+            System.out.println("✅ " + student.getName() + " successfully enrolled in " + course.getCourseName() + 
+                             " (Enrolled: " + course.getNumberOfEnrolledStudents() + "/" + course.getCapacity() + ")");
+        } else {
+            System.out.println("❌ Enrollment failed: " + course.getCourseName() + " is at full capacity (" + 
+                             course.getCapacity() + "/" + course.getCapacity() + ")");
+        }
+        return success;
     }
 
     // Getter methods for accessing managed lists

@@ -43,13 +43,31 @@ public class Main {
         registrationService.registerStaff("Ramesh", "Lab Assistant");
         registrationService.registerStaff("Suresh", "Clerk");
 
-        // Step 5: Create Courses using RegistrationService
-        System.out.println("\n=== Creating Courses ===");
-        registrationService.createCourse("DBMS");
-        registrationService.createCourse("OOPS");
-        registrationService.createCourse("Computer Networks");
+        // Step 5: Create Courses using RegistrationService with Capacity
+        System.out.println("\n=== Creating Courses with Capacity ===");
+        registrationService.createCourse("DBMS", 30);
+        registrationService.createCourse("OOPS", 2);  // Small capacity to demonstrate limit
+        registrationService.createCourse("Computer Networks", 25);
 
-        // Step 6: Display individual lists
+        // Step 6: Enroll students in courses
+        System.out.println("\n=== Enrolling Students in Courses ===");
+        List<Student> students = registrationService.getStudents();
+        List<Course> courses = registrationService.getCourses();
+        
+        // Enroll students in DBMS (has capacity 30)
+        registrationService.enrollStudentInCourse(students.get(0), courses.get(0)); // Vijay in DBMS
+        registrationService.enrollStudentInCourse(students.get(1), courses.get(0)); // Satya in DBMS
+        
+        // Enroll students in OOPS (has capacity 2 - will reach limit)
+        registrationService.enrollStudentInCourse(students.get(0), courses.get(1)); // Vijay in OOPS
+        registrationService.enrollStudentInCourse(students.get(1), courses.get(1)); // Satya in OOPS
+        registrationService.enrollStudentInCourse(students.get(2), courses.get(1)); // Ravi in OOPS - Should FAIL (capacity exceeded)
+        
+        // Enroll students in Computer Networks
+        registrationService.enrollStudentInCourse(students.get(2), courses.get(2)); // Ravi in Computer Networks
+        registrationService.enrollStudentInCourse(students.get(3), courses.get(2)); // Anjali in Computer Networks
+
+        // Step 7: Display individual lists
         System.out.println("\n--- Student List ---");
         for (Student s : registrationService.getStudents()) {
             s.displayDetails();
@@ -65,7 +83,7 @@ public class Main {
             st.displayDetails();
         }
 
-        System.out.println("\n--- Course List ---");
+        System.out.println("\n--- Course List with Enrollment Details ---");
         for (Course c : registrationService.getCourses()) {
             c.displayDetails();
         }
@@ -76,20 +94,20 @@ public class Main {
         // Step 8: Display registration summary
         registrationService.displayRegistrationSummary();
 
-        // Step 9: Mark Attendance using different overloaded methods
+        // Step 9: Mark Attendance using different overloaded methods (only for enrolled students)
         System.out.println("\n=== Demonstrating Overloaded markAttendance Methods ===");
         
         // Method 1: Using Student and Course objects directly
         System.out.println("\n--- Using markAttendance(Student, Course, String) ---");
-        List<Student> students = registrationService.getStudents();
-        List<Course> courses = registrationService.getCourses();
-        attendanceService.markAttendance(students.get(0), courses.get(0), "Present");
-        attendanceService.markAttendance(students.get(1), courses.get(1), "Absent");
+        
+        // Mark attendance for enrolled students only
+        attendanceService.markAttendance(students.get(0), courses.get(0), "Present"); // Vijay in DBMS
+        attendanceService.markAttendance(students.get(1), courses.get(1), "Absent");  // Satya in OOPS
         
         // Method 2: Using IDs with RegistrationService lookup
         System.out.println("\n--- Using markAttendance(int, int, String) with RegistrationService ---");
-        attendanceService.markAttendance(students.get(2).getId(), courses.get(2).getCourseId(), "Present");
-        attendanceService.markAttendance(students.get(3).getId(), courses.get(1).getCourseId(), "Late");
+        attendanceService.markAttendance(students.get(2).getId(), courses.get(2).getCourseId(), "Present"); // Ravi in Computer Networks
+        attendanceService.markAttendance(students.get(3).getId(), courses.get(2).getCourseId(), "Late");   // Anjali in Computer Networks
         
         // Try with invalid ID to show error handling
         attendanceService.markAttendance(999, courses.get(0).getCourseId(), "Present");
